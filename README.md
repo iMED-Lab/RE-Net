@@ -10,6 +10,7 @@ This repo is the official implementation of [Cerebrovascular Segmentation in MRA
 
 ## II. Usage:
 Using the `train3d.py` and `predict3d.py` to train and test the model on your own dataset, respectively.
+The `RE-Net.py` in the `models` folder can be easily edited and used in your own code.
 ## III. Requirements:
 * PyTorch = 1.2.0
 * tqdm
