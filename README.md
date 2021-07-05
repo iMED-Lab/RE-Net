@@ -16,5 +16,15 @@ Using the `train3d.py` and `predict3d.py` to train and test the model on your ow
 * SimpleITK
 * visdom
 ## IV. Citation：
+```
+@inproceedings{zhang2020cerebrovascular,
+  title={Cerebrovascular Segmentation in MRA via Reverse Edge Attention Network},
+  author={Zhang, Hao and Xia, Likun and Song, Ran and Yang, Jianlong and Hao, Huaying and Liu, Jiang and Zhao, Yitian},
+  booktitle={International Conference on Medical Image Computing and Computer-Assisted Intervention},
+  pages={66--75},
+  year={2020},
+  organization={Springer}
+}
+```
 
 
