@@ -38,9 +38,9 @@ def initialize_weights(*models):
 class ResEncoder(nn.Module):
     def __init__(self, in_channels, out_channels):
         super(ResEncoder, self).__init__()
-        self.conv1 = nn.Conv3d(in_channels, out_channels, kernel_size=3, padding=1)
+        self.conv1 = nn.Conv3d(in_channels, out_channels//2, kernel_size=3, padding=1)
         self.bn1 = nn.BatchNorm3d(out_channels)
-        self.conv2 = nn.Conv3d(out_channels, out_channels, kernel_size=3, padding=1)
+        self.conv2 = nn.Conv3d(out_channels//2, out_channels, kernel_size=3, padding=1)
         self.bn2 = nn.BatchNorm3d(out_channels)
         self.relu = nn.ReLU(inplace=False)
         self.conv1x1 = nn.Conv3d(in_channels, out_channels, kernel_size=1)
