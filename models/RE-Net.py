@@ -81,14 +81,14 @@ class RE_Net(nn.Module):
     def __init__(self):
 
         super(RE_Net, self).__init__()
-        self.encoder1 = ResEncoder(1, 64)
-        self.encoder2 = ResEncoder(64, 128)
-        self.encoder3 = ResEncoder(128, 256)
-        self.bridge = ResEncoder(256, 512)
+        self.encoder1 = ResEncoder(1, 32)
+        self.encoder2 = ResEncoder(32, 64)
+        self.encoder3 = ResEncoder(64, 128)
+        self.bridge = ResEncoder(128, 256)
 
-        self.conv1_1 = nn.Conv3d(512, 1, kernel_size=1)
-        self.conv2_2 = nn.Conv3d(256, 1, kernel_size=1)
-        self.conv3_3 = nn.Conv3d(128, 1, kernel_size=1)
+        self.conv1_1 = nn.Conv3d(256, 1, kernel_size=1)
+        self.conv2_2 = nn.Conv3d(128, 1, kernel_size=1)
+        self.conv3_3 = nn.Conv3d(64, 1, kernel_size=1)
 
 
         self.convTrans1 = nn.ConvTranspose3d(1, 1, kernel_size=2, stride=2)
@@ -97,14 +97,14 @@ class RE_Net(nn.Module):
 
 
 
-        self.decoder3 = Decoder(512, 256)
-        self.decoder2 = Decoder(256, 128)
-        self.decoder1 = Decoder(128, 64)
+        self.decoder3 = Decoder(256, 128)
+        self.decoder2 = Decoder(128, 64)
+        self.decoder1 = Decoder(64, 32)
         self.down = downsample()
-        self.up3 = deconv(512, 256)
-        self.up2 = deconv(256, 128)
-        self.up1 = deconv(128, 64)
-        self.final = nn.Conv3d(64, 1, kernel_size=1, padding=0)
+        self.up3 = deconv(256, 128)
+        self.up2 = deconv(128, 64)
+        self.up1 = deconv(64, 32)
+        self.final = nn.Conv3d(32, 1, kernel_size=1, padding=0)
         initialize_weights(self)
 
     def forward(self, x):
@@ -117,7 +117,7 @@ class RE_Net(nn.Module):
         con3_3 = self.conv3_3(enc2)
         convTrans3 = self.convTrans3(con3_3)
         x3 = -1 * (torch.sigmoid(convTrans3)) + 1
-        x3 = x3.expand(-1, 64, -1, -1, -1).mul(enc1)
+        x3 = x3.expand(-1, 32, -1, -1, -1).mul(enc1)
         x3 = x3 + enc1
 
         enc3 = self.encoder3(down2)
@@ -126,7 +126,7 @@ class RE_Net(nn.Module):
         con2_2 = self.conv2_2(enc3)
         convTrans2 = self.convTrans2(con2_2)
         x2 = -1 * (torch.sigmoid(convTrans2)) + 1
-        x2 = x2.expand(-1, 128, -1, -1, -1).mul(enc2)
+        x2 = x2.expand(-1, 64, -1, -1, -1).mul(enc2)
         x2 = x2 + enc2
 
 
@@ -138,7 +138,7 @@ class RE_Net(nn.Module):
 
 
         x = -1 * (torch.sigmoid(convTrans1)) + 1
-        x = x.expand(-1, 256, -1, -1, -1).mul(enc3)
+        x = x.expand(-1, 128, -1, -1, -1).mul(enc3)
         x = x + enc3
 
         up3 = self.up3(bridge)
