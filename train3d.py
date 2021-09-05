@@ -11,6 +11,7 @@ import numpy as np
 # from vis import Visualizeer
 # from models.dolz import VNet
 # from models.unet3d import UNet3d
+from models.RE-NET import RE_Net
 from dataloader.VesselLoader import Data
 # from MRABrainLoader import Data
 # from NiiDataLoader import Data
@@ -86,7 +87,7 @@ def adjust_lr(optimizer, base_lr, iter, max_iter, power=0.9):
 
 
 def train():
-    net = ResUNet().cuda()
+    net = RE_Net().cuda()
     net = nn.DataParallel(net).cuda()
     optimizer = optim.Adam(net.parameters(), lr=args['lr'], weight_decay=0.0005)
     print("{}{}{}{}".format(" " * 8, "\u250f", "\u2501" * 61, "\u2513"))
