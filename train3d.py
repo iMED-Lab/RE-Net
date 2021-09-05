@@ -11,7 +11,7 @@ import numpy as np
 # from vis import Visualizeer
 # from models.dolz import VNet
 # from models.unet3d import UNet3d
-from models.RE-NET import RE_Net
+from models.model import RE_Net
 from dataloader.VesselLoader import Data
 # from MRABrainLoader import Data
 # from NiiDataLoader import Data
@@ -26,12 +26,12 @@ from utils.visualize import init_visdom_line, update_lines
 
 args = {
     'root': '/home/leila/PycharmProjects/Attention/',
-    'data_path': '/home/imed/Documents/zhanghao/data/',
+    'data_path': '/存放输入数据的路径/',
     'epochs': 4000,
     'lr': 0.0001,
     'snapshot': 100,
     'test_step': 1,
-    'ckpt_path': '/home/imed/Documents/zhanghao/Seg3D/checkpoint/X-NetPatchEnhancedDice/',
+    'ckpt_path': '/保存模型权重的数据的路径/',
     'batch_size': 4,
 }
 
