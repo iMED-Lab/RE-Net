@@ -86,25 +86,9 @@ def adjust_lr(optimizer, base_lr, iter, max_iter, power=0.9):
 
 
 def train():
-    # net = AANet(classes=1, channels=1).cuda()
-    # net = CSNet3D(classes=2, channels=1).cuda()
-    # net = UNet3d(classes=2, channels=1).cuda()
     net = ResUNet().cuda()
-    # net = CSNet3D(classes=2, channels=1).cuda()
-
     net = nn.DataParallel(net).cuda()
     optimizer = optim.Adam(net.parameters(), lr=args['lr'], weight_decay=0.0005)
-
-
-    # load train dataset
-
-    # print('train_data[0].shape,train_data[1].shape:', train_data[0].shape, train_data[1].shape) ###
-
-    # weights = torch.FloatTensor(get_class_weights(args['data_path'])).cuda()
-    # critrion2 = WeightedCrossEntropyLoss(weight=None).cuda()
-    # critrion = dice_coeff_loss()
-    # critrion2 = WeightedCrossEntropyLoss().cuda()
-    # Start training
     print("{}{}{}{}".format(" " * 8, "\u250f", "\u2501" * 61, "\u2513"))
     print("{}{}{}{}".format(" " * 8, "\u2503", " " * 22 + " Start Straining " + " " * 22, "\u2503"))
     print("{}{}{}{}".format(" " * 8, "\u2517", "\u2501" * 61, "\u251b"))
@@ -118,32 +102,11 @@ def train():
         for idx, batch in enumerate(batchs_data):
             image = batch[0].type(torch.FloatTensor).cuda()
             label = batch[1].cuda()
-            # label = label.float()
             optimizer.zero_grad()
-
             pred = net(image)
-            # critrion3 = dice_coeff_loss().cuda()
-            # viz.img(name='images', img_=image[0, :, :, :])
-            # viz.img(name='labels', img_=label[0, :, :, :])
-            # viz.img(name='prediction', img_=pred[0, :, :, :])
-
             loss = dice_coeff_loss(pred, label)
-            # label = label.squeeze(1)  # for CE Loss series
-            # loss_ce = critrion(pred, label)
-            # loss_wce = critrion2(pred, label)
-
-            # loss = (0.8 * loss_ce + loss_wce + loss_dice) / 3
-            # loss_dice = critrion3(pred, label)
-            # label = label.squeeze(1)  # for CE Loss series
-            # loss1 = critrion(pred,label)
-            # loss2 = dice_coeff_loss(pred, label)
-            # # loss_wce = critrion2(pred, label)
-            #
-            # # loss = (0.8 * loss_ce + loss_wce + loss_dice) / 3
-            # loss = (loss1 + 0.8 * loss2) / 2.0
             loss.backward()
             optimizer.step()
-
             auc, acc, sen, spe, iou, dsc, pre = metrics3d(pred, label, pred.shape[0])
             print(
                 '{0:d}:{1:d}] \u2501\u2501\u2501 loss:{2:.10f}\tacc:{3:.4f}\tsen:{4:.4f}\tspe:{5:.4f}\tiou:{6:.4f}\tdsc:{7:.4f}\tpre:{8:.4f}'.format
